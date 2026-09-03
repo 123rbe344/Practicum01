@@ -6,44 +6,44 @@ import java.nio.file.Path;
 import java.io.BufferedReader;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
-public class PersonReader
+public class ProductReader
 {
     public static void main(String[] args)
     {
         Scanner sc = new Scanner(System.in);
         boolean anotherFile = true;
-        System.out.println("=== Person Reader ===");
+        System.out.println("=== Product Reader ===");
         do
         {
-            File selectedFile = choosePersonFile();
+            File selectedFile = chooseProductFile();
             if (selectedFile != null)
             {
-                displayPersonFile(selectedFile.toPath());
+                displayProductFile(selectedFile.toPath());
             }
             else
             {
                 System.out.println("\nNo file was selected.");
             }
-            anotherFile = SafeInput.getYNConfirm(sc, "\nOpen another Person file");
+            anotherFile = SafeInput.getYNConfirm(sc, "\nOpen another Product file");
         } while (anotherFile);
         System.out.println("\nDone. Goodbye!");
     }
-    public static File choosePersonFile()
+    public static File chooseProductFile()
     {
         JFileChooser chooser = new JFileChooser();
         File workingDirectory = new File(System.getProperty("user.dir"));
         chooser.setCurrentDirectory(workingDirectory);
-        chooser.setDialogTitle("Select a Person data file to open");
+        chooser.setDialogTitle("Select a Product data file to open");
         if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
         {
             return chooser.getSelectedFile();
         }
         return null;
     }
-    public static void displayPersonFile(Path filePath)
+    public static void displayProductFile(Path filePath)
     {
-        final int FIELDS_LENGTH = 5;
-        System.out.printf("%n%-12s%-14s%-15s%-9s%-6s%n", "ID", "First", "Last", "Title", "YOB");
+        final int FIELDS_LENGTH = 4;
+        System.out.printf("%n%-10s%-15s%-25s%-10s%n", "ID", "Name", "Description", "Cost");
         System.out.println("=====================================================");
         try (BufferedReader reader = Files.newBufferedReader(filePath, StandardCharsets.UTF_8))
         {
@@ -54,11 +54,10 @@ public class PersonReader
                 if (fields.length == FIELDS_LENGTH)
                 {
                     String id = fields[0].trim();
-                    String firstName = fields[1].trim();
-                    String lastName = fields[2].trim();
-                    String title = fields[3].trim();
-                    int yearOfBirth = Integer.parseInt(fields[4].trim());
-                    System.out.printf("%-12s%-14s%-15s%-9s%-6d%n", id, firstName, lastName, title, yearOfBirth);
+                    String name = fields[1].trim();
+                    String description = fields[2].trim();
+                    double cost = Double.parseDouble(fields[3].trim());
+                    System.out.printf("%-10s%-15s%-25s$%,.2f%n", id, name, description, cost);
                 }
                 else
                 {
